@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Code Burst</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        import React, { useState, useEffect } from 'react';
+
+        function DailyCodeBurst() {
+          const [code, setCode] = useState(null);
+          const [copied, setCopied] = useState(false);
+          const [loading, setLoading] = useState(true);
+          const [showQR, setShowQR] = useState(false);
+
+          const codeSnippets = [
+            {
+              language: "Python",
+              difficulty: "Easy",
+              title: "Reverse a String",
+              code: `def reverse_string(s):
+    return s[::-1]
+
+result = reverse_string("Hello, World!")
+print(result)  # Output: !dlroW ,olleH`,
+              explanation: "Python slice notation with step -1 reverses the string in one line."
+            },
+            {
+              language: "JavaScript",
+              difficulty: "Easy",
+              title: "Check for Even Number",
+              code: `const isEven = (num) => num % 2 === 0;
+
+console.log(isEven(4));  // true
+console.log(isEven(7));  // false`,
+              explanation: "Using the modulo operator to check if a number is divisible by 2."
+            },
+            {
+              language: "Java",
+              difficulty: "Medium",
+              title: "Find Maximum in Array",
+              code: `public class MaxFinder {
+    public static int findMax(int[] arr) {
+        int max = arr[0];
+        for (int num : arr) {
+            if (num > max) max = num;
+        }
+        return max;
+    }
+}`,
+              explanation: "Iterate through the array to find the largest element."
+            },
+            {
+              language: "C++",
+              difficulty: "Medium",
+              title: "Calculate Factorial",
+              code: `#include <iostream>
+using namespace std;
+
+int factorial(int n) {
+    return (n <= 1) ? 1 : n * factorial(n - 1);
+}
+
+int main() {
+    cout << factorial(5) << endl;  // Output: 120
+    return 0;
+}`,
+              explanation: "Recursive function to calculate factorial of a number."
+            },
+            {
+              language: "SQL",
+              difficulty: "Easy",
+              title: "Select with WHERE Clause",
+              code: `SELECT name, email, age
+FROM users
+WHERE age > 18 AND city = 'New York'
+ORDER BY name ASC;`,
+              explanation: "Query to fetch users over 18 from New York, ordered alphabetically."
+            },
+            {
+              language: "Go",
+              difficulty: "Medium",
+              title: "Goroutine with Channels",
+              code: `package main
+import "fmt"
+
+func main() {
+    ch := make(chan string)
+    go func() {
+        ch <- "Hello from goroutine!"
+    }()
+    msg := <-ch
+    fmt.Println(msg)
+}`,
+              explanation: "Demonstrating concurrent execution with goroutines and channels."
+            },
+            {
+              language: "Ruby",
+              difficulty: "Easy",
+              title: "Array Operations",
+              code: `numbers = [1, 2, 3, 4, 5]
+squared = numbers.map { |n| n ** 2 }
+puts squared.inspect  # Output: [1, 4, 9, 16, 25]`,
+              explanation: "Using map to transform array elements by squaring them."
+            },
+            {
+              language: "PHP",
+              difficulty: "Easy",
+              title: "String Manipulation",
+              code: `$text = "Hello World";
+$length = strlen($text);
+$upper = strtoupper($text);
+echo $upper . " (" . $length . ")";
+// Output: HELLO WORLD (11)`,
+              explanation: "Working with string functions for case conversion and length."
+            }
+          ];
+
+          useEffect(() => {
+            const getTodaysCode = () => {
+              const today = new Date();
+              const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+              const index = dayOfYear % codeSnippets.length;
+              setCode(codeSnippets[index]);
+              setLoading(false);
+            };
+
+            getTodaysCode();
+          }, []);
+
+          const handleCopy = () => {
+            navigator.clipboard.writeText(code.code);
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          };
+
+          const handleShare = () => {
+            const url = window.location.href;
+            if (navigator.share) {
+              navigator.share({
+                title: "Daily Code Burst",
+                text: `Check out today's code snippet: ${code.title}`,
+                url: url
+              });
+            } else {
+              navigator.clipboard.writeText(url);
+              alert("Link copied to clipboard!");
+            }
+          };
+
+          const generateQRCode = () => {
+            const url = window.location.href;
+            return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}`;
+          };
+
+          if (loading) {
+            return (
+              <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center">
+                <div className="text-white text-lg">Loading today's code...</div>
+              </div>
+            );
+          }
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
+              <div className="max-w-2xl mx-auto">
+                <div className="text-center mb-12">
+                  <h1 className="text-4xl font-bold text-white mb-2">Daily Code Burst</h1>
+                  <p className="text-slate-400">Your daily dose of code inspiration</p>
+                </div>
+
+                <div className="bg-slate-800 rounded-lg shadow-2xl overflow-hidden border border-slate-700">
+                  <div className="bg-slate-700 px-6 py-4 flex justify-between items-center">
+                    <div className="flex gap-4">
+                      <span className="inline-block bg-blue-600 text-white px-3 py-1 rounded text-sm font-medium">
+                        {code.language}
+                      </span>
+                      <span className="inline-block bg-amber-600 text-white px-3 py-1 rounded text-sm font-medium">
+                        {code.difficulty}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="px-6 pt-6">
+                    <h2 className="text-2xl font-semibold text-white">{code.title}</h2>
+                  </div>
+
+                  <div className="px-6 py-4">
+                    <pre className="bg-slate-900 text-slate-100 p-4 rounded overflow-x-auto text-sm font-mono leading-relaxed">
+                      <code>{code.code}</code>
+                    </pre>
+                  </div>
+
+                  <div className="px-6 pb-4">
+                    <p className="text-slate-300 text-sm leading-relaxed">
+                      <span className="font-semibold text-slate-200">💡 Explanation: </span>
+                      {code.explanation}
+                    </p>
+                  </div>
+
+                  <div className="px-6 pb-6 flex gap-3">
+                    <button
+                      onClick={handleCopy}
+                      className="flex items-center gap-2 flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition-colors font-medium"
+                    >
+                      📋 Copy Code
+                    </button>
+                    <button
+                      onClick={handleShare}
+                      className="flex items-center gap-2 flex-1 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded transition-colors font-medium"
+                    >
+                      🔗 Share
+                    </button>
+                    <button
+                      onClick={() => setShowQR(!showQR)}
+                      className="flex items-center gap-2 flex-1 bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded transition-colors font-medium"
+                    >
+                      📱 QR Code
+                    </button>
+                  </div>
+
+                  {showQR && (
+                    <div className="px-6 pb-6 border-t border-slate-700">
+                      <div className="flex flex-col items-center gap-4">
+                        <p className="text-slate-300 text-sm">Scan to share with friends</p>
+                        <img 
+                          src={generateQRCode()} 
+                          alt="QR Code for Daily Code Burst" 
+                          className="border-4 border-slate-600 rounded"
+                        />
+                        <button
+                          onClick={() => setShowQR(false)}
+                          className="text-slate-400 hover:text-slate-300 text-sm"
+                        >
+                          Hide QR Code
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <div className="text-center mt-8 text-slate-500 text-sm">
+                  <p>A new code snippet every day • Share with friends</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<DailyCodeBurst />);
+    </script>
+</body>
+</html>
