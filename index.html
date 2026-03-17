@@ -13,8 +13,7 @@
     <div id="root"></div>
 
     <script>
-        // Fallback snippets in case API fails
-        const fallbackSnippets = [
+        const codeSnippets = [
             {
                 language: "Python",
                 difficulty: "Easy",
@@ -24,15 +23,364 @@
 
 result = reverse_string("Hello, World!")
 print(result)  # !dlroW ,olleH`,
-                explanation: "Python slice notation with step -1 reverses the string."
+                explanation: "Python slice notation reverses strings efficiently."
             },
             {
                 language: "JavaScript",
                 difficulty: "Easy",
                 title: "Check for Even Number",
                 code: `const isEven = (num) => num % 2 === 0;
-console.log(isEven(4));  // true`,
-                explanation: "Using modulo operator to check divisibility by 2."
+console.log(isEven(4));   // true
+console.log(isEven(7));   // false`,
+                explanation: "Using modulo operator to check divisibility."
+            },
+            {
+                language: "Java",
+                difficulty: "Medium",
+                title: "Find Maximum in Array",
+                code: `public class MaxFinder {
+    public static int findMax(int[] arr) {
+        int max = arr[0];
+        for (int num : arr) {
+            if (num > max) max = num;
+        }
+        return max;
+    }
+}`,
+                explanation: "Iterate through array to find largest element."
+            },
+            {
+                language: "C++",
+                difficulty: "Medium",
+                title: "Calculate Factorial",
+                code: `#include <iostream>
+using namespace std;
+
+int factorial(int n) {
+    return (n <= 1) ? 1 : n * factorial(n - 1);
+}
+
+int main() {
+    cout << factorial(5) << endl;  // 120
+    return 0;
+}`,
+                explanation: "Recursive function to calculate factorial."
+            },
+            {
+                language: "SQL",
+                difficulty: "Easy",
+                title: "Filter with WHERE Clause",
+                code: `SELECT name, email, age
+FROM users
+WHERE age > 18 AND city = 'New York'
+ORDER BY name ASC;`,
+                explanation: "Query to fetch filtered data from database."
+            },
+            {
+                language: "Go",
+                difficulty: "Medium",
+                title: "Goroutine with Channels",
+                code: `package main
+import "fmt"
+
+func main() {
+    ch := make(chan string)
+    go func() {
+        ch <- "Hello from goroutine!"
+    }()
+    msg := <-ch
+    fmt.Println(msg)
+}`,
+                explanation: "Concurrent execution with goroutines."
+            },
+            {
+                language: "Ruby",
+                difficulty: "Easy",
+                title: "Array Map Operation",
+                code: `numbers = [1, 2, 3, 4, 5]
+squared = numbers.map { |n| n ** 2 }
+puts squared.inspect  # [1, 4, 9, 16, 25]`,
+                explanation: "Transform array elements using map."
+            },
+            {
+                language: "PHP",
+                difficulty: "Easy",
+                title: "String Functions",
+                code: `$text = "Hello World";
+$length = strlen($text);
+$upper = strtoupper($text);
+echo $upper . " (" . $length . ")";
+// HELLO WORLD (11)`,
+                explanation: "String manipulation functions."
+            },
+            {
+                language: "Python",
+                difficulty: "Medium",
+                title: "List Comprehension",
+                code: `numbers = [1, 2, 3, 4, 5]
+squared = [n**2 for n in numbers if n % 2 == 0]
+print(squared)  # [4, 16]`,
+                explanation: "Efficient way to filter and transform lists."
+            },
+            {
+                language: "JavaScript",
+                difficulty: "Medium",
+                title: "Array Filter",
+                code: `const numbers = [1, 2, 3, 4, 5, 6];
+const even = numbers.filter(n => n % 2 === 0);
+console.log(even);  // [2, 4, 6]`,
+                explanation: "Filter array elements by condition."
+            },
+            {
+                language: "Java",
+                difficulty: "Easy",
+                title: "String Concatenation",
+                code: `String name = "John";
+int age = 25;
+String message = "Hello, " + name + 
+                 "! You are " + age + " years old.";
+System.out.println(message);`,
+                explanation: "String concatenation in Java."
+            },
+            {
+                language: "C++",
+                difficulty: "Easy",
+                title: "Vector Operations",
+                code: `#include <vector>
+#include <iostream>
+using namespace std;
+
+int main() {
+    vector<int> v = {1, 2, 3, 4, 5};
+    for(int num : v) {
+        cout << num << " ";
+    }
+    return 0;
+}`,
+                explanation: "Using vectors for dynamic arrays."
+            },
+            {
+                language: "SQL",
+                difficulty: "Medium",
+                title: "JOIN Two Tables",
+                code: `SELECT u.name, u.email, o.order_id
+FROM users u
+INNER JOIN orders o ON u.id = o.user_id
+WHERE o.status = 'completed';`,
+                explanation: "Combine data from multiple tables."
+            },
+            {
+                language: "Go",
+                difficulty: "Easy",
+                title: "Function Definition",
+                code: `package main
+import "fmt"
+
+func add(a, b int) int {
+    return a + b
+}
+
+func main() {
+    result := add(5, 3)
+    fmt.Println(result)  // 8
+}`,
+                explanation: "Define and call functions in Go."
+            },
+            {
+                language: "Ruby",
+                difficulty: "Medium",
+                title: "Hash Iteration",
+                code: `person = {name: "Alice", age: 30, city: "NYC"}
+person.each do |key, value|
+    puts "#{key}: #{value}"
+end`,
+                explanation: "Iterate over hash key-value pairs."
+            },
+            {
+                language: "PHP",
+                difficulty: "Medium",
+                title: "Array Manipulation",
+                code: `$colors = ['red', 'green', 'blue'];
+array_push($colors, 'yellow');
+foreach($colors as $color) {
+    echo $color . ", ";
+}`,
+                explanation: "Add and iterate array elements."
+            },
+            {
+                language: "Python",
+                difficulty: "Hard",
+                title: "Decorator Pattern",
+                code: `def decorator(func):
+    def wrapper(*args, **kwargs):
+        print("Before function call")
+        result = func(*args, **kwargs)
+        print("After function call")
+        return result
+    return wrapper
+
+@decorator
+def greet(name):
+    print(f"Hello, {name}!")`,
+                explanation: "Use decorators to modify function behavior."
+            },
+            {
+                language: "JavaScript",
+                difficulty: "Hard",
+                title: "Async/Await",
+                code: `async function fetchData(url) {
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        return data;
+    } catch(error) {
+        console.error('Error:', error);
+    }
+}`,
+                explanation: "Handle asynchronous operations elegantly."
+            },
+            {
+                language: "Java",
+                difficulty: "Medium",
+                title: "Try-Catch Block",
+                code: `try {
+    int result = 10 / 0;
+} catch(ArithmeticException e) {
+    System.out.println("Cannot divide by zero!");
+} finally {
+    System.out.println("Cleanup code here");
+}`,
+                explanation: "Exception handling in Java."
+            },
+            {
+                language: "C++",
+                difficulty: "Hard",
+                title: "Template Function",
+                code: `template <typename T>
+T maxValue(T a, T b) {
+    return (a > b) ? a : b;
+}
+
+int main() {
+    cout << maxValue(5, 10) << endl;      // 10
+    cout << maxValue(3.5, 2.1) << endl;   // 3.5
+    return 0;
+}`,
+                explanation: "Generic programming with templates."
+            },
+            {
+                language: "SQL",
+                difficulty: "Hard",
+                title: "Window Functions",
+                code: `SELECT name, salary,
+       ROW_NUMBER() OVER (ORDER BY salary DESC) as rank
+FROM employees
+WHERE department = 'Sales'
+ORDER BY rank;`,
+                explanation: "Advanced SQL with window functions."
+            },
+            {
+                language: "Go",
+                difficulty: "Medium",
+                title: "Interfaces",
+                code: `type Reader interface {
+    Read() string
+}
+
+type File struct {
+    content string
+}
+
+func (f File) Read() string {
+    return f.content
+}`,
+                explanation: "Define and implement interfaces in Go."
+            },
+            {
+                language: "Ruby",
+                difficulty: "Hard",
+                title: "Metaprogramming",
+                code: `class MyClass
+    define_method(:hello) do |name|
+        "Hello, #{name}!"
+    end
+end
+
+obj = MyClass.new
+puts obj.hello("Ruby")`,
+                explanation: "Dynamic method definition with metaprogramming."
+            },
+            {
+                language: "PHP",
+                difficulty: "Medium",
+                title: "Object-Oriented Programming",
+                code: `class Animal {
+    public function speak() {
+        return "Some sound";
+    }
+}
+
+class Dog extends Animal {
+    public function speak() {
+        return "Woof!";
+    }
+}`,
+                explanation: "Inheritance and polymorphism in PHP."
+            },
+            {
+                language: "Python",
+                difficulty: "Easy",
+                title: "Lambda Function",
+                code: `numbers = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, numbers))
+print(squared)  # [1, 4, 9, 16, 25]`,
+                explanation: "Anonymous function for quick operations."
+            },
+            {
+                language: "JavaScript",
+                difficulty: "Easy",
+                title: "Destructuring",
+                code: `const person = {name: 'Alice', age: 30};
+const {name, age} = person;
+console.log(name, age);  // Alice 30`,
+                explanation: "Unpack values from objects."
+            },
+            {
+                language: "Java",
+                difficulty: "Hard",
+                title: "Streams API",
+                code: `List<Integer> numbers = Arrays.asList(1,2,3,4,5);
+int sum = numbers.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * 2)
+    .reduce(0, Integer::sum);
+System.out.println(sum);  // 12`,
+                explanation: "Functional programming with streams."
+            },
+            {
+                language: "C++",
+                difficulty: "Medium",
+                title: "Smart Pointers",
+                code: `#include <memory>
+using namespace std;
+
+int main() {
+    unique_ptr<int> ptr(new int(42));
+    cout << *ptr << endl;  // 42
+    return 0;
+}`,
+                explanation: "Memory management with smart pointers."
+            },
+            {
+                language: "SQL",
+                difficulty: "Easy",
+                title: "GROUP BY Clause",
+                code: `SELECT department, COUNT(*) as emp_count
+FROM employees
+GROUP BY department
+HAVING COUNT(*) > 5
+ORDER BY emp_count DESC;`,
+                explanation: "Aggregate data by grouping."
             }
         ];
 
@@ -41,65 +389,63 @@ console.log(isEven(4));  // true`,
                 const today = new Date();
                 const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
                 
-                // Use RapidAPI's code snippet API
-                const languages = ['python', 'javascript', 'java', 'cpp', 'go', 'rust', 'ruby', 'sql'];
-                const language = languages[dayOfYear % languages.length];
-                
-                // Fallback to a simpler approach - use a curated list from a public source
+                // Use Gist API to fetch from a public collection
                 const response = await fetch(
-                    `https://api.github.com/repos/30-seconds/30-seconds-of-code/contents/snippets?per_page=100`,
-                    {
-                        headers: {
-                            'Accept': 'application/vnd.github.v3+json'
-                        }
-                    }
+                    'https://api.github.com/repos/awesome-selfhosted/awesome-selfhosted/contents/README.md'
                 );
                 
                 if (response.ok) {
                     const data = await response.json();
-                    if (Array.isArray(data) && data.length > 0) {
-                        const file = data[dayOfYear % data.length];
-                        const contentResponse = await fetch(file.download_url);
-                        const content = await contentResponse.text();
-                        
+                    const content = atob(data.content);
+                    const snippets = content.split('\n').filter(line => line.includes('```'));
+                    
+                    if (snippets.length > 0) {
                         return {
-                            language: "JavaScript",
+                            language: "Code Snippet",
                             difficulty: dayOfYear % 3 === 0 ? "Hard" : dayOfYear % 2 === 0 ? "Medium" : "Easy",
-                            title: file.name.replace('.md', ''),
-                            code: content.substring(0, 300),
-                            explanation: "Code snippet from 30-seconds-of-code repository - updated daily!"
+                            title: "Daily Code from Repository",
+                            code: snippets[dayOfYear % snippets.length],
+                            explanation: "Code snippet fetched from public GitHub repository - updated daily!"
                         };
                     }
                 }
+                
+                // Alternative: Use public code dataset
+                const languages = ['python', 'javascript', 'java', 'cpp', 'go', 'rust', 'ruby', 'sql'];
+                const lang = languages[dayOfYear % languages.length];
+                
+                const codeResponse = await fetch(
+                    `https://raw.githubusercontent.com/TheAlgorithms/${lang}/master/README.md`
+                );
+                
+                if (codeResponse.ok) {
+                    const codeData = await codeResponse.text();
+                    const lines = codeData.split('\n');
+                    
+                    return {
+                        language: lang.charAt(0).toUpperCase() + lang.slice(1),
+                        difficulty: dayOfYear % 3 === 0 ? "Hard" : dayOfYear % 2 === 0 ? "Medium" : "Easy",
+                        title: `Algorithm from TheAlgorithms/${lang}`,
+                        code: lines.slice(0, 20).join('\n'),
+                        explanation: `Code from TheAlgorithms repository - fetched live daily!`
+                    };
+                }
             } catch (error) {
-                console.log("API Error, using fallback:", error);
+                console.log("Using fallback snippets");
             }
 
-            // Fallback if API fails
+            // Fallback
             const today = new Date();
             const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
-            return fallbackSnippets[dayOfYear % fallbackSnippets.length];
+            return codeSnippets[dayOfYear % codeSnippets.length];
         }
 
         function generateQRCode(url) {
             return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(url)}`;
         }
 
-        function initApp() {
+        function renderApp(code) {
             const root = document.getElementById('root');
-            root.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 flex items-center justify-center">
-                    <div class="text-white">
-                        <h1 class="text-2xl font-bold mb-2">Daily Code Burst</h1>
-                        <p class="text-slate-400">Loading today's code...</p>
-                    </div>
-                </div>
-            `;
-
-            getTodaysCode().then(code => {
-                renderApp(code);
-            });
-        }
 
             root.innerHTML = `
                 <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6">
@@ -166,7 +512,7 @@ console.log(isEven(4));  // true`,
                 </div>
             `;
 
-            // Add event listeners
+            // Event listeners
             document.getElementById('copyBtn').addEventListener('click', () => {
                 navigator.clipboard.writeText(code.code);
                 const btn = document.getElementById('copyBtn');
@@ -199,24 +545,20 @@ console.log(isEven(4));  // true`,
             });
         }
 
-        function initApp() {
-            const root = document.getElementById('root');
-            root.innerHTML = `
-                <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 flex items-center justify-center">
-                    <div class="text-white">
-                        <h1 class="text-2xl font-bold mb-2">Daily Code Burst</h1>
-                        <p class="text-slate-400">Loading today's code...</p>
-                    </div>
+        // Initialize
+        const root = document.getElementById('root');
+        root.innerHTML = `
+            <div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-6 flex items-center justify-center">
+                <div class="text-white text-center">
+                    <h1 class="text-2xl font-bold mb-2">Daily Code Burst</h1>
+                    <p class="text-slate-400">Loading today's code from the internet...</p>
                 </div>
-            `;
+            </div>
+        `;
 
-            getTodaysCode().then(code => {
-                renderApp(code);
-            });
-        }
-
-        function renderApp(code) {
-            const root = document.getElementById('root');
+        getTodaysCode().then(code => {
+            renderApp(code);
+        });
     </script>
 </body>
 </html>
