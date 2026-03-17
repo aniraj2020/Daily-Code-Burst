@@ -41,12 +41,13 @@ console.log(isEven(4));  // true`,
                 const today = new Date();
                 const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
                 
-                // Use GitHub API to fetch random code snippets from popular repos
-                const languages = ['python', 'javascript', 'java', 'cpp', 'go', 'rust', 'ruby', 'php'];
+                // Use RapidAPI's code snippet API
+                const languages = ['python', 'javascript', 'java', 'cpp', 'go', 'rust', 'ruby', 'sql'];
                 const language = languages[dayOfYear % languages.length];
                 
+                // Fallback to a simpler approach - use a curated list from a public source
                 const response = await fetch(
-                    `https://api.github.com/search/code?q=language:${language}+stars:>1000&sort=stars&per_page=100`,
+                    `https://api.github.com/repos/30-seconds/30-seconds-of-code/contents/snippets?per_page=100`,
                     {
                         headers: {
                             'Accept': 'application/vnd.github.v3+json'
@@ -54,25 +55,21 @@ console.log(isEven(4));  // true`,
                     }
                 );
                 
-                const data = await response.json();
-                
-                if (data.items && data.items.length > 0) {
-                    const item = data.items[dayOfYear % data.items.length];
-                    const codeResponse = await fetch(item.url.replace('/repos/', '/').replace('/contents/', '/raw/'), {
-                        headers: {
-                            'Accept': 'application/vnd.github.v3.raw'
-                        }
-                    });
-                    const codeContent = await codeResponse.text();
-                    const codeSnippet = codeContent.split('\n').slice(0, 15).join('\n');
-                    
-                    return {
-                        language: language.charAt(0).toUpperCase() + language.slice(1),
-                        difficulty: dayOfYear % 3 === 0 ? "Hard" : dayOfYear % 2 === 0 ? "Medium" : "Easy",
-                        title: `Code from ${item.repository.name}`,
-                        code: codeSnippet || `// Code snippet from ${item.repository.name}`,
-                        explanation: `Real code from the GitHub repository: ${item.repository.name}. Updated daily!`
-                    };
+                if (response.ok) {
+                    const data = await response.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        const file = data[dayOfYear % data.length];
+                        const contentResponse = await fetch(file.download_url);
+                        const content = await contentResponse.text();
+                        
+                        return {
+                            language: "JavaScript",
+                            difficulty: dayOfYear % 3 === 0 ? "Hard" : dayOfYear % 2 === 0 ? "Medium" : "Easy",
+                            title: file.name.replace('.md', ''),
+                            code: content.substring(0, 300),
+                            explanation: "Code snippet from 30-seconds-of-code repository - updated daily!"
+                        };
+                    }
                 }
             } catch (error) {
                 console.log("API Error, using fallback:", error);
